@@ -1,12 +1,11 @@
 ---
-
 - name: Set MySQL root password before Package Installation
-  debconf: name='mysql-server' question='mysql-server/root_password' value='{{sql_root_password | quote}}' vtype='password'
+  debconf: name='mysql-server' question='mysql-server/root_password' value='{{db-server_root_pw | quote}}' vtype='password'
   changed_when: false # Suppress "changed" status
   when: mariadb is undefined
 
 - name: Confirm MySQL root passwort before installing
-  debconf: name='mysql-server' question='mysql-server/root_password_again' value='{{sql_root_password | quote}}' vtype='password'
+  debconf: name='mysql-server' question='mysql-server/root_password_again' value='{{db-server_root_pw | quote}}' vtype='password'
   changed_when: false # Suppress "changed" status
   when: mariadb is undefined
 
@@ -23,12 +22,12 @@
     - start mysql/mariadb server
 
 - name: Set MariaDB root password before Package Installation
-  debconf: name='mariadb-server' question='mariadb-server/root_password' value='{{sql_root_password | quote}}' vtype='password'
+  debconf: name='mariadb-server' question='mariadb-server/root_password' value='{{db-server_root_pw | quote}}' vtype='password'
   changed_when: false # Suppress "changed" status
   when: mariadb is defined
 
 - name: Confirm MariaDB root passwort before installing
-  debconf: name='mariadb-server' question='mariadb-server/root_password_again' value='{{sql_root_password | quote}}' vtype='password'
+  debconf: name='mariadb-server' question='mariadb-server/root_password_again' value='{{db-server_root_pw | quote}}' vtype='password'
   changed_when: false # Suppress "changed" status
   when: mariadb is defined
 
@@ -44,4 +43,3 @@
 
 - name: Push client configuration for root user
   template: src=my.cnf.j2 dest=/root/.my.cnf owner=root group=root mode=0600
-
